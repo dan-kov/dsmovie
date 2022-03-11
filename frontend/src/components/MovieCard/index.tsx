@@ -1,15 +1,21 @@
 import MovieScore from "components/MovieScore";
 import { Link } from "react-router-dom";
+import { Movie } from "types/movie";
 
-const movie = {
-    id: 1,
-    image: "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/jBJWaqoSCiARWtfV0GlqHrcdidd.jpg",
-    title: "The Witcher",
-    count: 2,
-    score: 4.5
-};
 
-function MovieCard(){
+/*
+Props podem ser entendidas como argumentos do componente React.
+
+https://pt-br.reactjs.org/docs/components-and-props.html
+
+NOTA: em uma renderização dinâmica de coleção, cada elemento renderizado DEVE possuir um atributo key.
+*/
+
+type Props = {
+    movie: Movie;
+}
+
+function MovieCard({ movie } : Props){
     return(
         <div>
             <img className="dsmovie-movie-card-image" src={movie.image} alt={movie.title} />

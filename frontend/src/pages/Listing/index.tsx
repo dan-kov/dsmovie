@@ -14,41 +14,46 @@ function Listing(){
     Manter estado no componente
     */
     const[pageNumber, setPageNumber] = useState(0);
+    const[page, setPage] = useState<MoviePage>({
+        content: [],
+        last: true,
+        totalPages: 0,
+        totalElements: 0,
+        size: 12,
+        number: 0,
+        first: true,
+        numberOfElements: 0,
+        empty: true
+    });
 
     /*
     Hook: useEffect
     Executar algo na instanciação ou destruição do componente, observar estado
     */
     useEffect(() => {
-        axios.get(`${BASE_URL}/movies?size=12&page=0`)
+        axios.get(`${BASE_URL}/movies?size=12&page=${pageNumber}&sort=title`)
         .then(response => {
-            console.log(response.data);
+            //console.log(response.data);
             const data = response.data as MoviePage;
-            setPageNumber(data.number);
+            setPage(data);
+            //setPageNumber(data.number);
         });
-    });
+    }, [pageNumber]);
 
 
+    /*NOTA: em uma renderização dinâmica de coleção, cada elemento renderizado DEVE possuir um atributo key.*/
     return(
       <>
-        <p>{pageNumber}</p>
-
         <Pagination />
 
         <div className="container">
             <div className="row">
-                <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                    <MovieCard />
-                </div> 
-                <div className="col-sm-6 col-lg-4 col-xl-3">
-                    <MovieCard />
-                </div> <div className="col-sm-6 col-lg-4 col-xl-3">
-                    <MovieCard />
-                </div> <div className="col-sm-6 col-lg-4 col-xl-3">
-                    <MovieCard />
-                </div> <div className="col-sm-6 col-lg-4 col-xl-3">
-                    <MovieCard />
-                </div> 
+                {page.content.map(movie => (
+                    <div key={movie.id} className="col-sm-6 col-lg-4 col-xl-3 mb-3" >
+                        <MovieCard movie={movie} />
+                    </div> 
+                    )
+                )}                                
             </div>
         </div>
       </>
